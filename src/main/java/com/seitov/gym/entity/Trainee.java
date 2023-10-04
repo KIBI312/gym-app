@@ -18,7 +18,7 @@ public class Trainee {
     private LocalDate dateOfBirth;
     @Column(name = "address")
     private String address;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
