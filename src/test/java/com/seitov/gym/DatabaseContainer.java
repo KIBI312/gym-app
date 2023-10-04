@@ -13,7 +13,8 @@ public class DatabaseContainer extends PostgreSQLContainer<DatabaseContainer> {
 
     public static DatabaseContainer getInstance() {
         if(container == null) {
-            container = new DatabaseContainer().withInitScript("schema.sql");
+            container = new DatabaseContainer()
+                    .withUsername("user");
             container.start();
         }
         return container;
