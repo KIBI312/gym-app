@@ -1,5 +1,8 @@
 package com.seitov.gym.dao;
 
+import org.springframework.data.annotation.Transient;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.EntityManager;
 import java.util.List;
 
@@ -34,6 +37,9 @@ public abstract class AbstractJpaDao<T, ID> {
     }
 
     public void delete(T toDelete) {
+        if(!em.contains(toDelete)) {
+            toDelete = em.merge(toDelete);
+        }
         em.remove(toDelete);
     }
 

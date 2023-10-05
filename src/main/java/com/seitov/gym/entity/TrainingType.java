@@ -12,7 +12,7 @@ public class TrainingType {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
     @Enumerated(EnumType.STRING)
-    @Column(name = "name", updatable = false, insertable = false)
+    @Column(name = "name")
     private Name name;
 
     public enum Name {
