@@ -8,6 +8,8 @@ import com.seitov.gym.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class TraineeService {
 
@@ -16,6 +18,7 @@ public class TraineeService {
     @Autowired
     private UserService userService;
 
+    @Transactional
     public UsernamePasswordDto createTrainee(UserDto dto) {
         Trainee trainee = new Trainee();
         User user = new User();
