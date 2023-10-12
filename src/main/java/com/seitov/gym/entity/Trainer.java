@@ -9,7 +9,8 @@ import lombok.Data;
 public class Trainer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trainer_generator")
+    @SequenceGenerator(name = "trainer_generator", sequenceName = "trainer_seq")
     private Integer id;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")

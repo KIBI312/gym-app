@@ -11,7 +11,8 @@ import java.time.LocalDate;
 public class Training {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "training_generator")
+    @SequenceGenerator(name = "training_generator", sequenceName = "training_seq")
     private Integer id;
     @Column(name = "name")
     private String name;

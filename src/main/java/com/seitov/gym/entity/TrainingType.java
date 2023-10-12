@@ -9,7 +9,8 @@ import lombok.Data;
 public class TrainingType {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "training_type_generator")
+    @SequenceGenerator(name = "training_type_generator", sequenceName = "training_type_seq")
     private Integer id;
     @Enumerated(EnumType.STRING)
     @Column(name = "name")

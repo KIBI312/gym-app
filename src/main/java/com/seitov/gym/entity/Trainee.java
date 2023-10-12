@@ -2,8 +2,8 @@ package com.seitov.gym.entity;
 
 
 import lombok.Data;
-import javax.persistence.*;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -12,7 +12,8 @@ import java.time.LocalDate;
 public class Trainee {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trainee_generator")
+    @SequenceGenerator(name = "trainee_generator", sequenceName = "trainee_seq")
     private Integer id;
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
