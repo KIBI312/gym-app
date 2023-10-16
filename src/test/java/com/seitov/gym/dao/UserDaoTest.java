@@ -14,8 +14,10 @@ import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Repository.class))
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -36,6 +38,21 @@ public class UserDaoTest {
                 .filter(s -> s.startsWith("John.Smith"))
                 .count();
         assertEquals(5, matches);
+    }
+
+    @Test
+    public void findByUsername() {
+        String username = "John.Smith3";
+        Optional<User> user = userDao.findByUsername(username);
+        assertTrue(user.isPresent());
+        assertEquals(username, user.get().getUsername());
+    }
+
+    @Test
+    public void findByUsernameNonExisting() {
+        String username = "Vasiliy.Ivanin";
+        Optional<User> user = userDao.findByUsername(username);
+        assertTrue(user.isEmpty());
     }
 
 }
