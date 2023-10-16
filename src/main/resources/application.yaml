@@ -10,5 +10,8 @@ spring:
     show-sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+jwt:
+  private.key: classpath:app.key
+  public.key: classpath:app.pub
 server:
   port: 8081
