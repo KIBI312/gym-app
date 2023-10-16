@@ -1,6 +1,6 @@
 INSERT INTO users(id, username)
-    VALUES(nextval('hibernate_sequence'), 'John.Smith'),
-    (nextval('hibernate_sequence'), 'John.Smith1'),
-    (nextval('hibernate_sequence'), 'John.Smith2'),
-    (nextval('hibernate_sequence'), 'John.Smith3'),
-    (nextval('hibernate_sequence'), 'John.Smith4');
+    VALUES(nextval('users_seq'), 'John.Smith'),
+    (nextval('users_seq'), 'John.Smith1'),
+    (nextval('users_seq'), 'John.Smith2'),
+    (nextval('users_seq'), 'John.Smith3'),
+    (nextval('users_seq'), 'John.Smith4');

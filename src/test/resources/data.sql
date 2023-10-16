@@ -8,4 +8,3 @@ INSERT INTO training_type(id, name)
     (12, 'zumba'),
     (13, 'stretching'),
     (14, 'resistance');
-ALTER SEQUENCE hibernate_sequence RESTART WITH 100;
