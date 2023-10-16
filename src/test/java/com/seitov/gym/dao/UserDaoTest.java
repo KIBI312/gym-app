@@ -29,8 +29,8 @@ public class UserDaoTest {
     private UserDao userDao;
 
     @Test
-    public void findByUsernameTest() {
-        List<User> users = userDao.findByUsername("John.Smith");
+    public void findByUsernameStartingWithTest() {
+        List<User> users = userDao.findByUsernameStartingWith("John.Smith");
         long matches = users.stream()
                 .map(User::getUsername)
                 .filter(s -> s.startsWith("John.Smith"))
