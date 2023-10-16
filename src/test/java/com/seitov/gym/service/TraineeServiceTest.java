@@ -3,6 +3,7 @@ package com.seitov.gym.service;
 import com.seitov.gym.dao.TraineeDao;
 import com.seitov.gym.dto.UserDto;
 import com.seitov.gym.dto.UsernamePasswordDto;
+import com.seitov.gym.service.impl.TraineeServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,10 +21,12 @@ public class TraineeServiceTest {
     @Mock
     private UserService userService;
     @Mock
+    private PasswordService passwordService;
+    @Mock
     private TraineeDao traineeDao;
 
     @InjectMocks
-    private TraineeService traineeService;
+    private TraineeServiceImpl traineeService;
 
     @Test
     public void traineeCreation() {
@@ -32,7 +35,7 @@ public class TraineeServiceTest {
                 LocalDate.of(1975, 3, 15), "NY street");
         //when
         when(userService.generateUsername("John", "Smith")).thenReturn("John.Smith");
-        when(userService.generatePassword()).thenReturn("1234567910");
+        when(passwordService.generatePassword()).thenReturn("1234567910");
         //then
         UsernamePasswordDto result = traineeService.createTrainee(userDto);
         assertEquals("John.Smith",result.getUsername());
@@ -46,7 +49,7 @@ public class TraineeServiceTest {
                 LocalDate.of(1975, 3, 15), "NY street");
         //when
         when(userService.generateUsername("John", "Smith")).thenReturn("John.Smith3");
-        when(userService.generatePassword()).thenReturn("1234567910");
+        when(passwordService.generatePassword()).thenReturn("1234567910");
         //then
         UsernamePasswordDto result = traineeService.createTrainee(userDto);
         assertEquals("John.Smith3",result.getUsername());
