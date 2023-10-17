@@ -10,7 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -42,10 +43,10 @@ public class SecurityConfig {
                         (requests) -> requests
                                 .antMatchers(HttpMethod.POST,"/api/trainee").permitAll()
                                 .antMatchers(HttpMethod.POST, "/api/trainer").permitAll()
+                                .antMatchers(HttpMethod.POST, "/api/token").permitAll()
                                 .anyRequest().authenticated())
                 .csrf(
                         (csrf) -> csrf.ignoringAntMatchers("/api/token", "/api/trainee", "/api/trainer"))
-                .httpBasic(Customizer.withDefaults())
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement(
                         (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -67,6 +68,11 @@ public class SecurityConfig {
                 .privateKey(this.privateKey).build();
         JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwkSource);
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 
     @Bean
