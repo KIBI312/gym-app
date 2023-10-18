@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -24,5 +25,6 @@ public class TraineeDto {
     private LocalDate dateOfBirth;
     private String address;
     private Boolean isActive;
+    private List<TrainerDto> trainers;
 
 }

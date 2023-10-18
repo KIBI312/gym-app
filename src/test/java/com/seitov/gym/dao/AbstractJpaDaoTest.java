@@ -17,6 +17,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,6 +49,7 @@ public class AbstractJpaDaoTest {
         trainee.setDateOfBirth(LocalDate.of(2000, Month.APRIL, 20));
         trainee.setAddress("SomeStreet");
         trainee.setUser(user);
+        trainee.setTrainers(Collections.emptySet());
     }
 
     @Test

@@ -7,6 +7,7 @@ import com.seitov.gym.dto.UsernamePasswordDto;
 import com.seitov.gym.entity.Trainee;
 import com.seitov.gym.entity.User;
 import com.seitov.gym.service.impl.TraineeServiceImpl;
+import ma.glasnost.orika.MapperFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,6 +34,8 @@ public class TraineeServiceTest {
     private PasswordService passwordService;
     @Mock
     private TraineeDao traineeDao;
+    @Mock
+    private MapperFacade orikaMapper;
 
     @InjectMocks
     private TraineeServiceImpl traineeService;
@@ -55,6 +59,7 @@ public class TraineeServiceTest {
         traineeDto.setDateOfBirth(trainee.getDateOfBirth());
         traineeDto.setAddress(trainee.getAddress());
         traineeDto.setIsActive(trainee.getUser().getIsActive());
+        traineeDto.setTrainers(Collections.emptyList());
     }
 
     @Test

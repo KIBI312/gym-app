@@ -1,7 +1,9 @@
 package com.seitov.gym.entity;
 
-import javax.persistence.*;
 import lombok.Data;
+
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
@@ -18,5 +20,7 @@ public class Trainer {
     @OneToOne
     @JoinColumn(name = "specialization_id")
     private TrainingType trainingType;
+    @ManyToMany
+    private Set<Trainee> trainees;
 
 }

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Collections;
 
 @Service
 public class TrainerServiceImpl implements TrainerService {
@@ -41,6 +42,7 @@ public class TrainerServiceImpl implements TrainerService {
         user.setIsActive(true);
         trainer.setTrainingType(trainingType);
         trainer.setUser(user);
+        trainer.setTrainees(Collections.emptySet());
         trainerDao.create(trainer);
         return new UsernamePasswordDto(user.getUsername(), rawPassword);
     }

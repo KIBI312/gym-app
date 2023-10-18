@@ -1,9 +1,6 @@
 package com.seitov.gym.controller;
 
-import com.seitov.gym.dto.ErrorMessage;
-import com.seitov.gym.dto.TraineeDto;
-import com.seitov.gym.dto.UserDto;
-import com.seitov.gym.dto.UsernamePasswordDto;
+import com.seitov.gym.dto.*;
 import com.seitov.gym.service.TraineeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,6 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/trainee")
@@ -49,6 +48,21 @@ public class TraineeController {
     @GetMapping(path = "/{username}")
     public TraineeDto getTraineeProfile(@PathVariable String username) {
         return traineeService.getTrainee(username);
+    }
+
+
+    @Operation(description = "Assign new Trainers to Trainee", tags = "trainee")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = TraineeDto.class))),
+            @ApiResponse(responseCode = "400", description = "Trying to add Trainers to non-existing Trainee",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorMessage.class))),
+    })
+    @PutMapping(path = "/trainers")
+    public List<TrainerDto> assignTrainers(@RequestBody AssignTrainersDto assignTrainersDto) {
+        return traineeService.addTrainers(assignTrainersDto.getUsername(), assignTrainersDto.getTrainers());
     }
 
 }

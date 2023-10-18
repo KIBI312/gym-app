@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class TrainerDto {
 
+    private String username;
     @NotBlank
     @Size(min = 2, max = 20, message = "First name should be in range between 2 and 20 characters")
     private String firstName;

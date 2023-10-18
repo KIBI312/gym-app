@@ -36,7 +36,10 @@ public class TrainerServiceTest {
         TrainingType trainingType = new TrainingType();
         trainingType.setId(1);
         trainingType.setName(TrainingType.Name.fitness);
-        TrainerDto trainerDto = new TrainerDto("John", "Smith", trainingType.getName());
+        TrainerDto trainerDto = new TrainerDto();
+        trainerDto.setFirstName("John");
+        trainerDto.setLastName( "Smith");
+        trainerDto.setSpecialization(trainingType.getName());
         //when
         when(userService.generateUsername("John", "Smith")).thenReturn("John.Smith");
         when(trainingTypeDao.findByName(TrainingType.Name.fitness)).thenReturn(trainingType);

@@ -31,7 +31,10 @@ public class TrainerControllerTest {
     @Test
     public void trainerCreation() throws Exception {
         //given
-        TrainerDto trainerDto = new TrainerDto("John", "Smith", TrainingType.Name.fitness);
+        TrainerDto trainerDto = new TrainerDto();
+        trainerDto.setFirstName("John");
+        trainerDto.setLastName( "Smith");
+        trainerDto.setSpecialization(TrainingType.Name.fitness);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("firstName", "John");
         jsonObject.put("lastName", "Smith");
