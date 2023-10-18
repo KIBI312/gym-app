@@ -99,4 +99,12 @@ public class TraineeServiceImpl implements TraineeService {
         return orikaMapper.map(trainee, TraineeDto.class);
     }
 
+    @Override
+    @Transactional
+    public void deleteTrainee(UsernamePasswordDto dto) {
+        Trainee trainee = traineeDao.findByUsername(dto.getUsername())
+            .orElseThrow(() -> new UsernameNotFoundException("User with username: " + dto.getUsername() + " doesn't exist"));
+        traineeDao.delete(trainee);
+    }
+
 }

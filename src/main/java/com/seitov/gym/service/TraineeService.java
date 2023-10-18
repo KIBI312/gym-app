@@ -10,5 +10,6 @@ public interface TraineeService {
     TraineeDto getTrainee(String username);
     List<TrainerDto> addTrainers(String traineeUsername, List<String> usernames);
     TraineeDto updateTrainee(UpdateTraineeDto dto);
+    void deleteTrainee(UsernamePasswordDto dto);
 
 }

@@ -68,6 +68,20 @@ public class TraineeController {
         return traineeService.updateTrainee(dto);
     }
 
+    @Operation(description = "Delete Trainee profile", tags = "trainee")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Void.class))),
+            @ApiResponse(responseCode = "400", description = "Trying to delete non-existing profile",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorMessage.class))),
+    })
+    @DeleteMapping
+    public void deleteTrainee(@RequestBody UsernamePasswordDto dto) {
+        traineeService.deleteTrainee(dto);
+    }
+
     @Operation(description = "Assign new Trainers to Trainee", tags = "trainee")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", content =

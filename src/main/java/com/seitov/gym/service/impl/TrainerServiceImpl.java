@@ -28,6 +28,7 @@ public class TrainerServiceImpl implements TrainerService {
     @Autowired
     private PasswordService passwordService;
 
+    @Override
     @Transactional
     public UsernamePasswordDto createTrainer(TrainerDto dto) {
         Trainer trainer = new Trainer();
