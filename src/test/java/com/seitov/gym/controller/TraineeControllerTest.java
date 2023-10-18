@@ -1,15 +1,20 @@
 package com.seitov.gym.controller;
 
 import com.nimbusds.jose.shaded.json.JSONObject;
+import com.seitov.gym.dto.TraineeDto;
 import com.seitov.gym.dto.UserDto;
 import com.seitov.gym.dto.UsernamePasswordDto;
+import com.seitov.gym.entity.Trainee;
+import com.seitov.gym.entity.User;
 import com.seitov.gym.service.TraineeService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -17,6 +22,7 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,6 +34,27 @@ public class TraineeControllerTest {
 
     @MockBean
     private TraineeService traineeService;
+
+    private final Trainee trainee = new Trainee();
+    private final TraineeDto traineeDto = new TraineeDto();
+
+    @BeforeEach
+    public void initData() {
+        //Trainee init
+        User user = new User();
+        user.setUsername("John.Smith");
+        user.setFirstName("John");
+        user.setLastName("Smith");
+        trainee.setUser(user);
+        trainee.setAddress("NY Street");
+        trainee.setDateOfBirth(LocalDate.of(1975, 3, 15));
+        //TraineeDto init
+        traineeDto.setFirstName(trainee.getUser().getFirstName());
+        traineeDto.setLastName(trainee.getUser().getLastName());
+        traineeDto.setDateOfBirth(trainee.getDateOfBirth());
+        traineeDto.setAddress(trainee.getAddress());
+        traineeDto.setIsActive(trainee.getUser().getIsActive());
+    }
 
     @Test
     public void testTraineeCreation() throws Exception {
@@ -65,6 +92,33 @@ public class TraineeControllerTest {
                         .content(jsonObject.toJSONString()))
                 .andExpect(status().isBadRequest()).andReturn();
         assertTrue(result.getResponse().getContentAsString().contains("Date should be in format: dd-MM-yyyy"));
+    }
+
+    @Test
+    public void getTraineeProfile() throws Exception {
+        //given
+        String username = "John.Smith";
+        //when
+        when(traineeService.getTrainee(username)).thenReturn(traineeDto);
+        //then
+        MvcResult result = mockMvc.perform(get("/api/trainee/" + username))
+                .andExpect(status().isOk())
+                .andReturn();
+        assertTrue(result.getResponse().getContentAsString().contains("\"firstName\":\"John\""));
+        assertTrue(result.getResponse().getContentAsString().contains("\"lastName\":\"Smith\""));
+    }
+
+    @Test
+    public void getTraineeProfileWithNonExistingUsername() throws Exception {
+        //given
+        String username = "Vasiliy.Smith";
+        //when
+        when(traineeService.getTrainee(username)).thenThrow(new UsernameNotFoundException("User with username: Vasiliy.Smith doesn't exist"));
+        //then
+        MvcResult result = mockMvc.perform(get("/api/trainee/" + username))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+        assertTrue(result.getResponse().getContentAsString().contains("User with username: Vasiliy.Smith doesn't exist"));
     }
 
 }

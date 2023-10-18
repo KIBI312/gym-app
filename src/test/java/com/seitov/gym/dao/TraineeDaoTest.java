@@ -1,7 +1,7 @@
 package com.seitov.gym.dao;
 
 import com.seitov.gym.DatabaseContainer;
-import com.seitov.gym.entity.User;
+import com.seitov.gym.entity.Trainee;
 import org.junit.ClassRule;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.containers.PostgreSQLContainer;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,38 +20,29 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Repository.class))
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Sql("/sql/user.sql")
-public class UserDaoTest {
+@Sql("/sql/trainee.sql")
+public class TraineeDaoTest {
+
 
     @ClassRule
     public static PostgreSQLContainer postgreSQLContainer = DatabaseContainer.getInstance();
 
     @Autowired
-    private UserDao userDao;
-
-    @Test
-    public void findByUsernameStartingWithTest() {
-        List<User> users = userDao.findByUsernameStartingWith("John.Smith");
-        long matches = users.stream()
-                .map(User::getUsername)
-                .filter(s -> s.startsWith("John.Smith"))
-                .count();
-        assertEquals(5, matches);
-    }
+    private TraineeDao traineeDao;
 
     @Test
     public void findByUsername() {
-        String username = "John.Smith3";
-        Optional<User> user = userDao.findByUsername(username);
-        assertTrue(user.isPresent());
-        assertEquals(username, user.get().getUsername());
+        String username = "John.Smith";
+        Optional<Trainee> trainee = traineeDao.findByUsername(username);
+        assertTrue(trainee.isPresent());
+        assertEquals(username, trainee.get().getUser().getUsername());
     }
 
     @Test
     public void findByUsernameNonExisting() {
         String username = "Vasiliy.Ivanin";
-        Optional<User> user = userDao.findByUsername(username);
-        assertTrue(user.isEmpty());
+        Optional<Trainee> trainee = traineeDao.findByUsername(username);
+        assertTrue(trainee.isEmpty());
     }
 
 }

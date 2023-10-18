@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Repository.class))
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Sql("/data.sql")
+@Sql("/sql/data.sql")
 public class AbstractJpaDaoTest {
 
     @ClassRule

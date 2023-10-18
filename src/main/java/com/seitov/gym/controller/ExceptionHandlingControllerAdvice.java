@@ -5,6 +5,7 @@ import com.seitov.gym.dto.ErrorMessage;
 import com.seitov.gym.entity.TrainingType;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -30,6 +31,16 @@ public class ExceptionHandlingControllerAdvice {
         } else {
             message.setMessage(ex.getMessage());
         }
+        return message;
+    }
+
+    @Hidden
+    @ExceptionHandler(value = UsernameNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ErrorMessage handleUsernameNotFound(UsernameNotFoundException ex) {
+        ErrorMessage message = new ErrorMessage();
+        message.setTimestamp(timestamp());
+        message.setMessage(ex.getMessage());
         return message;
     }
 
