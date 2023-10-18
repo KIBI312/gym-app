@@ -5,7 +5,9 @@ import com.seitov.gym.dto.ErrorMessage;
 import com.seitov.gym.entity.TrainingType;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -41,6 +43,26 @@ public class ExceptionHandlingControllerAdvice {
         ErrorMessage message = new ErrorMessage();
         message.setTimestamp(timestamp());
         message.setMessage(ex.getMessage());
+        return message;
+    }
+
+    @Hidden
+    @ExceptionHandler(value = AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    protected ErrorMessage handleAccessViolation(AccessDeniedException ex) {
+        ErrorMessage message = new ErrorMessage();
+        message.setTimestamp(timestamp());
+        message.setMessage(ex.getMessage());
+        return message;
+    }
+
+    @Hidden
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ErrorMessage handleValidationViolation(MethodArgumentNotValidException ex) {
+        ErrorMessage message = new ErrorMessage();
+        message.setTimestamp(timestamp());
+        message.setMessage(ex.getFieldError().getDefaultMessage());
         return message;
     }
 

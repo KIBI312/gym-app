@@ -2,10 +2,7 @@ package com.seitov.gym.service.impl;
 
 import com.seitov.gym.dao.TraineeDao;
 import com.seitov.gym.dao.TrainerDao;
-import com.seitov.gym.dto.TraineeDto;
-import com.seitov.gym.dto.TrainerDto;
-import com.seitov.gym.dto.UserDto;
-import com.seitov.gym.dto.UsernamePasswordDto;
+import com.seitov.gym.dto.*;
 import com.seitov.gym.entity.Trainee;
 import com.seitov.gym.entity.Trainer;
 import com.seitov.gym.entity.User;
@@ -14,10 +11,12 @@ import com.seitov.gym.service.TraineeService;
 import com.seitov.gym.service.UserService;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -80,6 +79,24 @@ public class TraineeServiceImpl implements TraineeService {
         }
         traineeDao.update(trainee);
         return orikaMapper.mapAsList(trainee.getTrainers(), TrainerDto.class);
+    }
+
+    @Override
+    @Transactional
+    public TraineeDto updateTrainee(UpdateTraineeDto dto) {
+        Trainee trainee = traineeDao.findByUsername(dto.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User with username: " + dto.getUsername() + " doesn't exist"));
+        if(!passwordService.matches(dto.getPassword(), trainee.getUser().getPassword()) && trainee.getUser().getIsActive()){
+            throw new AccessDeniedException("Incorrect credentials for trainee update");
+        }
+        String address = dto.getAddress() != null ? dto.getAddress() : trainee.getAddress();
+        LocalDate dateOfBirth = dto.getDateOfBirth() != null ? dto.getDateOfBirth() : trainee.getDateOfBirth();
+        trainee.getUser().setFirstName(dto.getFirstName());
+        trainee.getUser().setLastName(dto.getLastName());
+        trainee.setAddress(address);
+        trainee.setDateOfBirth(dateOfBirth);
+        trainee = traineeDao.update(trainee);
+        return orikaMapper.map(trainee, TraineeDto.class);
     }
 
 }

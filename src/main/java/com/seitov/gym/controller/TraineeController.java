@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -50,6 +51,22 @@ public class TraineeController {
         return traineeService.getTrainee(username);
     }
 
+    @Operation(description = "Update Trainee profile", tags = "trainee")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = TraineeDto.class))),
+            @ApiResponse(responseCode = "400", description = "Validation errors",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorMessage.class))),
+            @ApiResponse(responseCode = "403", description = "Incorrect credentials or trying update Inactive profile",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorMessage.class))),
+    })
+    @PutMapping
+    public TraineeDto updateTrainee(@RequestBody @Valid UpdateTraineeDto dto) {
+        return traineeService.updateTrainee(dto);
+    }
 
     @Operation(description = "Assign new Trainers to Trainee", tags = "trainee")
     @ApiResponses(value = {
