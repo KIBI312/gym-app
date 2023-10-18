@@ -9,3 +9,6 @@ spring:
       ddl-auto: update
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+jwt:
+  private.key: classpath:app.key
+  public.key: classpath:app.pub
