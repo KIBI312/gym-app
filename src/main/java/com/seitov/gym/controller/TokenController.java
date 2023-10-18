@@ -2,7 +2,13 @@ package com.seitov.gym.controller;
 
 import com.nimbusds.jose.shaded.json.JSONObject;
 import com.seitov.gym.dto.UsernamePasswordDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,6 +33,14 @@ public class TokenController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Operation(description = "Creates token against provided credentials", tags = "auth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(example = "{access_token: generatedToken}"))),
+            @ApiResponse(responseCode = "401", description = "Wrong credentials",
+                         content = @Content(schema = @Schema(implementation = Void.class)))
+    })
     @PostMapping
     public JSONObject token(@RequestBody UsernamePasswordDto dto) {
         Authentication authentication = authenticationManager.authenticate(

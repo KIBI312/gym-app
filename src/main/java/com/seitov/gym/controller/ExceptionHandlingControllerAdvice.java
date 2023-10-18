@@ -3,6 +3,7 @@ package com.seitov.gym.controller;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.seitov.gym.dto.ErrorMessage;
 import com.seitov.gym.entity.TrainingType;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -16,6 +17,7 @@ import java.time.format.FormatStyle;
 @RestControllerAdvice
 public class ExceptionHandlingControllerAdvice {
 
+    @Hidden
     @ExceptionHandler(value = InvalidFormatException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ErrorMessage handleInvalidFormatExceptions(InvalidFormatException ex) {

@@ -41,9 +41,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(
                         (requests) -> requests
-                                .antMatchers(HttpMethod.POST,"/api/trainee").permitAll()
-                                .antMatchers(HttpMethod.POST, "/api/trainer").permitAll()
+                                .antMatchers(HttpMethod.POST,"/api/trainee", "/api/trainer").permitAll()
                                 .antMatchers(HttpMethod.POST, "/api/token").permitAll()
+                                .antMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .anyRequest().authenticated())
                 .csrf(
                         (csrf) -> csrf.ignoringAntMatchers("/api/token", "/api/trainee", "/api/trainer"))
