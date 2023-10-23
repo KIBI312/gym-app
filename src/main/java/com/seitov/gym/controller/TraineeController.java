@@ -1,6 +1,7 @@
 package com.seitov.gym.controller;
 
 import com.seitov.gym.dto.*;
+import com.seitov.gym.dto.common.PersonalInfo;
 import com.seitov.gym.service.TraineeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -33,8 +34,8 @@ public class TraineeController {
                             schema = @Schema(implementation = ErrorMessage.class))),
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public UsernamePasswordDto registerTrainee(@RequestBody UserDto userDto) {
-        return traineeService.createTrainee(userDto);
+    public UsernamePasswordDto registerTrainee(@RequestBody PersonalInfo personalInfo) {
+        return traineeService.createTrainee(personalInfo);
     }
 
     @Operation(description = "Get Trainee profile", tags = "trainee")
@@ -63,9 +64,9 @@ public class TraineeController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorMessage.class))),
     })
-    @PutMapping
-    public TraineeDto updateTrainee(@RequestBody @Valid UpdateTraineeDto dto) {
-        return traineeService.updateTrainee(dto);
+    @PutMapping(path = "/{username}")
+    public TraineeDto updateTrainee(@PathVariable String username, @RequestBody @Valid PersonalInfo dto) {
+        return traineeService.updateTrainee(username, dto);
     }
 
     @Operation(description = "Delete Trainee profile", tags = "trainee")
@@ -82,18 +83,18 @@ public class TraineeController {
         traineeService.deleteTrainee(dto);
     }
 
-    @Operation(description = "Assign new Trainers to Trainee", tags = "trainee")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", content =
-            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = TraineeDto.class))),
-            @ApiResponse(responseCode = "400", description = "Trying to add Trainers to non-existing Trainee",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ErrorMessage.class))),
-    })
-    @PutMapping(path = "/trainers")
-    public List<TrainerDto> assignTrainers(@RequestBody AssignTrainersDto assignTrainersDto) {
-        return traineeService.addTrainers(assignTrainersDto.getUsername(), assignTrainersDto.getTrainers());
-    }
+        @Operation(description = "Assign new Trainers to Trainee", tags = "trainee")
+        @ApiResponses(value = {
+                @ApiResponse(responseCode = "200", content =
+                @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                        schema = @Schema(implementation = TraineeDto.class))),
+                @ApiResponse(responseCode = "400", description = "Trying to add Trainers to non-existing Trainee",
+                        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                schema = @Schema(implementation = ErrorMessage.class))),
+        })
+        @PutMapping(path = "/{username}/trainers")
+        public List<TrainerDto> assignTrainers(@PathVariable String username, @RequestBody @Valid AssignTrainersDto dto) {
+            return traineeService.addTrainers(username, dto.getTrainers());
+        }
 
 }

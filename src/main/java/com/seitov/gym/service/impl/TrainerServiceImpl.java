@@ -10,6 +10,7 @@ import com.seitov.gym.entity.User;
 import com.seitov.gym.service.PasswordService;
 import com.seitov.gym.service.TrainerService;
 import com.seitov.gym.service.UserService;
+import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,19 +28,21 @@ public class TrainerServiceImpl implements TrainerService {
     private UserService userService;
     @Autowired
     private PasswordService passwordService;
+    @Autowired
+    private MapperFacade orikaMapper;
 
     @Override
     @Transactional
     public UsernamePasswordDto createTrainer(TrainerDto dto) {
-        Trainer trainer = new Trainer();
-        User user = new User();
         TrainingType trainingType = trainingTypeDao.findByName(dto.getSpecialization());
         String rawPassword = passwordService.generatePassword();
-        trainingType.setName(dto.getSpecialization());
-        user.setFirstName(dto.getFirstName());
-        user.setLastName(dto.getLastName());
-        user.setUsername(userService.generateUsername(dto.getFirstName(), dto.getLastName()));
-        user.setPassword(passwordService.encodePassword(rawPassword));
+        String encodedPassword = passwordService.encodePassword(rawPassword);
+        User user = new User();
+        Trainer trainer = new Trainer();
+        user.setFirstName(dto.getFullName().getFirstName());
+        user.setLastName(dto.getFullName().getLastName());
+        user.setUsername(userService.generateUsername(user.getFirstName(), user.getLastName()));
+        user.setPassword(encodedPassword);
         user.setIsActive(true);
         trainer.setTrainingType(trainingType);
         trainer.setUser(user);

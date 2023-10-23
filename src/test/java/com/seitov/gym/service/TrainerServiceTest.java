@@ -4,6 +4,7 @@ import com.seitov.gym.dao.TrainerDao;
 import com.seitov.gym.dao.TrainingTypeDao;
 import com.seitov.gym.dto.TrainerDto;
 import com.seitov.gym.dto.UsernamePasswordDto;
+import com.seitov.gym.dto.common.FullName;
 import com.seitov.gym.entity.TrainingType;
 import com.seitov.gym.service.impl.TrainerServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -37,8 +38,7 @@ public class TrainerServiceTest {
         trainingType.setId(1);
         trainingType.setName(TrainingType.Name.fitness);
         TrainerDto trainerDto = new TrainerDto();
-        trainerDto.setFirstName("John");
-        trainerDto.setLastName( "Smith");
+        trainerDto.setFullName(new FullName("John", "Smith"));
         trainerDto.setSpecialization(trainingType.getName());
         //when
         when(userService.generateUsername("John", "Smith")).thenReturn("John.Smith");

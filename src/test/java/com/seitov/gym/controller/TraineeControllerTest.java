@@ -2,8 +2,9 @@ package com.seitov.gym.controller;
 
 import com.nimbusds.jose.shaded.json.JSONObject;
 import com.seitov.gym.dto.TraineeDto;
-import com.seitov.gym.dto.UserDto;
 import com.seitov.gym.dto.UsernamePasswordDto;
+import com.seitov.gym.dto.common.FullName;
+import com.seitov.gym.dto.common.PersonalInfo;
 import com.seitov.gym.entity.Trainee;
 import com.seitov.gym.entity.User;
 import com.seitov.gym.service.TraineeService;
@@ -49,17 +50,17 @@ public class TraineeControllerTest {
         trainee.setAddress("NY Street");
         trainee.setDateOfBirth(LocalDate.of(1975, 3, 15));
         //TraineeDto init
-        traineeDto.setFirstName(trainee.getUser().getFirstName());
-        traineeDto.setLastName(trainee.getUser().getLastName());
-        traineeDto.setDateOfBirth(trainee.getDateOfBirth());
-        traineeDto.setAddress(trainee.getAddress());
+        FullName fullName = new FullName(trainee.getUser().getFirstName(), trainee.getUser().getLastName());
+        PersonalInfo personalInfo = new PersonalInfo(fullName, trainee.getDateOfBirth(),trainee.getAddress());
+        traineeDto.setPersonalInfo(personalInfo);
         traineeDto.setIsActive(trainee.getUser().getIsActive());
     }
 
     @Test
     public void testTraineeCreation() throws Exception {
         //given
-        UserDto userDto = new UserDto("John", "Smith",
+        FullName fullName = new FullName("John", "Smith");
+        PersonalInfo userDto = new PersonalInfo(fullName,
                 LocalDate.of(1975, 3, 15), "NY street");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("firstName", "John");

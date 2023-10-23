@@ -3,6 +3,7 @@ package com.seitov.gym.controller;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import com.seitov.gym.dto.TrainerDto;
 import com.seitov.gym.dto.UsernamePasswordDto;
+import com.seitov.gym.dto.common.FullName;
 import com.seitov.gym.entity.TrainingType;
 import com.seitov.gym.service.TrainerService;
 import org.junit.jupiter.api.Test;
@@ -32,8 +33,7 @@ public class TrainerControllerTest {
     public void trainerCreation() throws Exception {
         //given
         TrainerDto trainerDto = new TrainerDto();
-        trainerDto.setFirstName("John");
-        trainerDto.setLastName( "Smith");
+        trainerDto.setFullName(new FullName("John", "Smith"));
         trainerDto.setSpecialization(TrainingType.Name.fitness);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("firstName", "John");

@@ -1,26 +1,21 @@
-package com.seitov.gym.dto;
+package com.seitov.gym.dto.common;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
+public class PersonalInfo {
 
-    @NotBlank
-    @Size(min = 2, max = 20, message = "First name should be in range between 2 and 20 characters")
-    private String firstName;
-    @NotBlank
-    @Size(min = 2, max = 20, message = "Last name should be in range between 2 and 20 characters")
-    private String lastName;
+    @JsonUnwrapped
+    private FullName fullName;
     @Schema(type = "string", pattern = "dd-MM-yyyy", example = "31-12-2022")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate dateOfBirth;

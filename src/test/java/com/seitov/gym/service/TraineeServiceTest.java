@@ -2,8 +2,9 @@ package com.seitov.gym.service;
 
 import com.seitov.gym.dao.TraineeDao;
 import com.seitov.gym.dto.TraineeDto;
-import com.seitov.gym.dto.UserDto;
 import com.seitov.gym.dto.UsernamePasswordDto;
+import com.seitov.gym.dto.common.FullName;
+import com.seitov.gym.dto.common.PersonalInfo;
 import com.seitov.gym.entity.Trainee;
 import com.seitov.gym.entity.User;
 import com.seitov.gym.service.impl.TraineeServiceImpl;
@@ -54,10 +55,9 @@ public class TraineeServiceTest {
         trainee.setAddress("NY Street");
         trainee.setDateOfBirth(LocalDate.of(1975, 3, 15));
         //TraineeDto init
-        traineeDto.setFirstName(trainee.getUser().getFirstName());
-        traineeDto.setLastName(trainee.getUser().getLastName());
-        traineeDto.setDateOfBirth(trainee.getDateOfBirth());
-        traineeDto.setAddress(trainee.getAddress());
+        FullName fullName = new FullName(trainee.getUser().getFirstName(), trainee.getUser().getLastName());
+        PersonalInfo personalInfo = new PersonalInfo(fullName, trainee.getDateOfBirth(), trainee.getAddress());
+        traineeDto.setPersonalInfo(personalInfo);
         traineeDto.setIsActive(trainee.getUser().getIsActive());
         traineeDto.setTrainers(Collections.emptyList());
     }
@@ -65,11 +65,13 @@ public class TraineeServiceTest {
     @Test
     public void traineeCreation() {
         //given
-        UserDto userDto = new UserDto("John", "Smith",
+        FullName fullName = new FullName("John", "Smith");
+        PersonalInfo userDto = new PersonalInfo(fullName,
                 LocalDate.of(1975, 3, 15), "NY street");
         //when
         when(userService.generateUsername("John", "Smith")).thenReturn("John.Smith");
         when(passwordService.generatePassword()).thenReturn("1234567910");
+        when(orikaMapper.map(userDto, Trainee.class)).thenReturn(trainee);
         //then
         UsernamePasswordDto result = traineeService.createTrainee(userDto);
         assertEquals("John.Smith",result.getUsername());
@@ -79,11 +81,13 @@ public class TraineeServiceTest {
     @Test
     public void traineeCreationWithExistingUsername() {
         //given
-        UserDto userDto = new UserDto("John", "Smith",
+        FullName fullName = new FullName("John", "Smith");
+        PersonalInfo userDto = new PersonalInfo(fullName,
                 LocalDate.of(1975, 3, 15), "NY street");
         //when
         when(userService.generateUsername("John", "Smith")).thenReturn("John.Smith3");
         when(passwordService.generatePassword()).thenReturn("1234567910");
+        when(orikaMapper.map(userDto, Trainee.class)).thenReturn(trainee);
         //then
         UsernamePasswordDto result = traineeService.createTrainee(userDto);
         assertEquals("John.Smith3",result.getUsername());
@@ -96,13 +100,14 @@ public class TraineeServiceTest {
         String username = "John.Smith";
         //when
         when(traineeDao.findByUsername(username)).thenReturn(Optional.of(trainee));
+        when(orikaMapper.map(trainee, TraineeDto.class)).thenReturn(traineeDto);
         //then
         assertEquals(traineeDto, traineeService.getTrainee(username));
     }
 
     @Test
     public void getTraineeProfileWithNonExistingUsername() {
-        //given
+        //given()
         String username = "Vasiliy.Smith";
         //when
         when(traineeDao.findByUsername(any())).thenReturn(Optional.empty());
