@@ -42,18 +42,18 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(
-                        (requests) -> requests
+                        requests -> requests
                                 .antMatchers(HttpMethod.POST,"/api/trainee", "/api/trainer").permitAll()
                                 .antMatchers(HttpMethod.POST, "/api/token").permitAll()
                                 .antMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .anyRequest().authenticated())
                 .csrf(
-                        (csrf) -> csrf.ignoringAntMatchers("/api/token", "/api/trainee", "/api/trainer"))
+                        csrf -> csrf.ignoringAntMatchers("/api/token", "/api/trainee", "/api/trainer"))
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement(
-                        (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(
-                        (exceptions) -> exceptions
+                        exceptions -> exceptions
                         .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                         .accessDeniedHandler(new BearerTokenAccessDeniedHandler()));
         return http.build();

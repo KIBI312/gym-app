@@ -36,7 +36,7 @@ public class TrainerDao extends AbstractJpaDao<Trainer, Integer> {
         Root<Trainer> trainerRoot = criteriaQuery.from(Trainer.class);
         Join<Trainer, User> joinUser = trainerRoot.join("user");
         Set<Trainer> trainers = new HashSet<>();
-        usernames.forEach((username) -> {
+        usernames.forEach(username -> {
             try {
                 Predicate usernamePredicate = cb.equal(joinUser.get("username"), username);
                 criteriaQuery.where(usernamePredicate);
