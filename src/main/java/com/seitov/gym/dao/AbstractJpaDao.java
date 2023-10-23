@@ -9,7 +9,7 @@ public abstract class AbstractJpaDao<T, ID> {
 
     private final Class<T> tClass;
 
-    public AbstractJpaDao(Class<T> tClass) {
+    protected AbstractJpaDao(Class<T> tClass) {
         this.tClass = tClass;
     }
 
