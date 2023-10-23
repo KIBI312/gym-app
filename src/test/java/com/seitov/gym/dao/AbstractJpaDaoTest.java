@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest(includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Repository.class))
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Sql("/sql/data.sql")
-public class AbstractJpaDaoTest {
+class AbstractJpaDaoTest {
 
     @ClassRule
     public static PostgreSQLContainer postgreSQLContainer = DatabaseContainer.getInstance();
@@ -36,7 +36,7 @@ public class AbstractJpaDaoTest {
     private Trainee trainee;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         trainee = new Trainee();
         User user = new User();
         user.setId(1);
@@ -53,17 +53,17 @@ public class AbstractJpaDaoTest {
     }
 
     @Test
-    public void testFindById()  {
+    void testFindById()  {
         assertEquals(trainee, traineeDao.findById(2));
     }
 
     @Test
-    public void testFindAll() {
+    void testFindAll() {
         assertEquals(List.of(trainee), traineeDao.findAll());
     }
 
     @Test
-    public void testEntityCreation() {
+    void testEntityCreation() {
         //given
         User user = new User();
         user.setUsername("testUser");
@@ -76,19 +76,19 @@ public class AbstractJpaDaoTest {
     }
 
     @Test
-    public void testEntityDeletion() {
+    void testEntityDeletion() {
         traineeDao.delete(trainee);
         assertNull(traineeDao.findById(2));
     }
 
     @Test
-    public void testEntityDeletionById() {
+    void testEntityDeletionById() {
         traineeDao.deleteById(2);
         assertNull(traineeDao.findById(2));
     }
 
     @Test
-    public void testEntityUpdate() {
+    void testEntityUpdate() {
         User user = trainee.getUser();
         user.setUsername("newUsername");
         trainee.setAddress("newAddress");

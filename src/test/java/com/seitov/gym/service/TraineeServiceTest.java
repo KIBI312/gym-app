@@ -27,7 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class TraineeServiceTest {
+class TraineeServiceTest {
 
     @Mock
     private UserService userService;
@@ -45,7 +45,7 @@ public class TraineeServiceTest {
     private final TraineeDto traineeDto = new TraineeDto();
 
     @BeforeEach
-    public void initData() {
+    void initData() {
         //Trainee init
         User user = new User();
         user.setUsername("John.Smith");
@@ -63,7 +63,7 @@ public class TraineeServiceTest {
     }
 
     @Test
-    public void traineeCreation() {
+    void traineeCreation() {
         //given
         FullName fullName = new FullName("John", "Smith");
         PersonalInfo userDto = new PersonalInfo(fullName,
@@ -79,7 +79,7 @@ public class TraineeServiceTest {
     }
 
     @Test
-    public void traineeCreationWithExistingUsername() {
+    void traineeCreationWithExistingUsername() {
         //given
         FullName fullName = new FullName("John", "Smith");
         PersonalInfo userDto = new PersonalInfo(fullName,
@@ -95,7 +95,7 @@ public class TraineeServiceTest {
     }
 
     @Test
-    public void getTraineeProfile() {
+    void getTraineeProfile() {
         //given
         String username = "John.Smith";
         //when
@@ -106,7 +106,7 @@ public class TraineeServiceTest {
     }
 
     @Test
-    public void getTraineeProfileWithNonExistingUsername() {
+    void getTraineeProfileWithNonExistingUsername() {
         //given()
         String username = "Vasiliy.Smith";
         //when

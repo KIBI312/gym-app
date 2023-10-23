@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DataJpaTest(includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Repository.class))
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Sql("/sql/trainee.sql")
-public class TraineeDaoTest {
+class TraineeDaoTest {
 
 
     @ClassRule
@@ -31,7 +31,7 @@ public class TraineeDaoTest {
     private TraineeDao traineeDao;
 
     @Test
-    public void findByUsername() {
+    void findByUsername() {
         String username = "John.Smith";
         Optional<Trainee> trainee = traineeDao.findByUsername(username);
         assertTrue(trainee.isPresent());
@@ -39,7 +39,7 @@ public class TraineeDaoTest {
     }
 
     @Test
-    public void findByUsernameNonExisting() {
+    void findByUsernameNonExisting() {
         String username = "Vasiliy.Ivanin";
         Optional<Trainee> trainee = traineeDao.findByUsername(username);
         assertTrue(trainee.isEmpty());

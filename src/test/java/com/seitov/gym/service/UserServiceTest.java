@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
 
     @Mock
     private UserDao userDao;
@@ -27,7 +27,7 @@ public class UserServiceTest {
     private UserService userService = new UserServiceImpl();
 
     @Test
-    public void usernameGeneration() {
+    void usernameGeneration() {
         //given
         String firstName = "John";
         String lastName = "Smith";
@@ -37,7 +37,7 @@ public class UserServiceTest {
 
 
     @Test
-    public void usernameDuplicateGeneration() {
+    void usernameDuplicateGeneration() {
         //given
         String firstName = "John";
         String lastName = "Smith";

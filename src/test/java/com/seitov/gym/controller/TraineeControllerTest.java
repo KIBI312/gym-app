@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(value = TraineeController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
-public class TraineeControllerTest {
+class TraineeControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -40,7 +40,7 @@ public class TraineeControllerTest {
     private final TraineeDto traineeDto = new TraineeDto();
 
     @BeforeEach
-    public void initData() {
+    void initData() {
         //Trainee init
         User user = new User();
         user.setUsername("John.Smith");
@@ -57,7 +57,7 @@ public class TraineeControllerTest {
     }
 
     @Test
-    public void testTraineeCreation() throws Exception {
+    void testTraineeCreation() throws Exception {
         //given
         FullName fullName = new FullName("John", "Smith");
         PersonalInfo userDto = new PersonalInfo(fullName,
@@ -80,7 +80,7 @@ public class TraineeControllerTest {
     }
 
     @Test
-    public void testTraineeCreationInvalidDateFormat() throws Exception {
+    void testTraineeCreationInvalidDateFormat() throws Exception {
         //given
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("firstName", "John");
@@ -96,7 +96,7 @@ public class TraineeControllerTest {
     }
 
     @Test
-    public void getTraineeProfile() throws Exception {
+    void getTraineeProfile() throws Exception {
         //given
         String username = "John.Smith";
         //when
@@ -110,7 +110,7 @@ public class TraineeControllerTest {
     }
 
     @Test
-    public void getTraineeProfileWithNonExistingUsername() throws Exception {
+    void getTraineeProfileWithNonExistingUsername() throws Exception {
         //given
         String username = "Vasiliy.Smith";
         //when

@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DataJpaTest(includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Repository.class))
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Sql("/sql/trainer.sql")
-public class TrainerDaoTest {
+class TrainerDaoTest {
 
     @ClassRule
     public static PostgreSQLContainer postgreSQLContainer = DatabaseContainer.getInstance();
@@ -31,7 +31,7 @@ public class TrainerDaoTest {
     private TrainerDao trainerDao;
 
     @Test
-    public void findListByUsername() {
+    void findListByUsername() {
         List<String> usernames = List.of("John.Smith1", "John.Smith2", "John.Smith3");
         Set<Trainer> trainers = trainerDao.findByUsername(usernames);
         assertEquals(3, trainers.size());

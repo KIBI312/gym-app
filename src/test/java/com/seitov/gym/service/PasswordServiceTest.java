@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
-public class PasswordServiceTest {
+class PasswordServiceTest {
 
     @Spy
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -21,12 +21,12 @@ public class PasswordServiceTest {
     private final PasswordService passwordService = new PasswordServiceImpl();
 
     @Test
-    public void passwordGeneration() {
+    void passwordGeneration() {
         assertEquals(10, passwordService.generatePassword().length());
     }
 
     @Test
-    public void passwordEncoding() {
+    void passwordEncoding() {
         String rawPassword = "testing123";
         String encodedPassword = passwordService.encodePassword(rawPassword);
         assertTrue(passwordEncoder.matches(rawPassword, encodedPassword));

@@ -1,8 +1,5 @@
 package com.seitov.gym.dao;
 
-import org.springframework.data.annotation.Transient;
-import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityManager;
 import java.util.List;
 

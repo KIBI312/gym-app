@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class TrainerServiceTest {
+class TrainerServiceTest {
 
     @Mock
     private UserService userService;
@@ -32,7 +32,7 @@ public class TrainerServiceTest {
     private TrainerServiceImpl trainerService;
 
     @Test
-    public void trainerCreation() {
+    void trainerCreation() {
         //given
         TrainingType trainingType = new TrainingType();
         trainingType.setId(1);

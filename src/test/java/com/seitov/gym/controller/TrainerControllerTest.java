@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(value = TrainerController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
-public class TrainerControllerTest {
+class TrainerControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -30,7 +30,7 @@ public class TrainerControllerTest {
     private TrainerService trainerService;
 
     @Test
-    public void trainerCreation() throws Exception {
+    void trainerCreation() throws Exception {
         //given
         TrainerDto trainerDto = new TrainerDto();
         trainerDto.setFullName(new FullName("John", "Smith"));
@@ -52,7 +52,7 @@ public class TrainerControllerTest {
     }
 
     @Test
-    public void trainerCreationInvalidSpecialization() throws Exception {
+    void trainerCreationInvalidSpecialization() throws Exception {
         //given
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("firstName", "John");
