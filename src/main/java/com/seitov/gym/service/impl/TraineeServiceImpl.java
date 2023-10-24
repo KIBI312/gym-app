@@ -91,9 +91,9 @@ public class TraineeServiceImpl implements TraineeService {
 
     @Override
     @Transactional
-    public void deleteTrainee(UsernamePasswordDto dto) {
-        Trainee trainee = traineeDao.findByUsername(dto.getUsername())
-            .orElseThrow(() -> new UsernameNotFoundException("User with username: " + dto.getUsername() + " doesn't exist"));
+    public void deleteTrainee(String username) {
+        Trainee trainee = traineeDao.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("User with username: " + username + " doesn't exist"));
         traineeDao.delete(trainee);
     }
 

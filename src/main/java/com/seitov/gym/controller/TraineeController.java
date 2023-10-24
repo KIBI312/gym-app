@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,6 +20,7 @@ import java.util.List;
 public class TraineeController {
 
     private final TraineeService traineeService;
+    private final String AUTH_CHECK_BY_USERNAME = "#username == authentication.name";
 
     public TraineeController(TraineeService traineeService) {
         this.traineeService = traineeService;
@@ -48,6 +50,7 @@ public class TraineeController {
                             schema = @Schema(implementation = ErrorMessage.class))),
     })
     @GetMapping(path = "/{username}")
+    @PreAuthorize(AUTH_CHECK_BY_USERNAME)
     public TraineeDto getTraineeProfile(@PathVariable String username) {
         return traineeService.getTrainee(username);
     }
@@ -65,6 +68,7 @@ public class TraineeController {
                             schema = @Schema(implementation = ErrorMessage.class))),
     })
     @PutMapping(path = "/{username}")
+    @PreAuthorize(AUTH_CHECK_BY_USERNAME)
     public TraineeDto updateTrainee(@PathVariable String username, @RequestBody @Valid PersonalInfo dto) {
         return traineeService.updateTrainee(username, dto);
     }
@@ -78,13 +82,14 @@ public class TraineeController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorMessage.class))),
     })
-    @DeleteMapping
-    public void deleteTrainee(@RequestBody UsernamePasswordDto dto) {
-        traineeService.deleteTrainee(dto);
+    @DeleteMapping(path = "/{username}")
+    @PreAuthorize(AUTH_CHECK_BY_USERNAME)
+    public void deleteTrainee(@PathVariable String username) {
+        traineeService.deleteTrainee(username);
     }
 
-        @Operation(description = "Assign new Trainers to Trainee", tags = "trainee")
-        @ApiResponses(value = {
+    @Operation(description = "Assign new Trainers to Trainee", tags = "trainee")
+    @ApiResponses(value = {
                 @ApiResponse(responseCode = "200", content =
                 @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                         schema = @Schema(implementation = TraineeDto.class))),
@@ -92,9 +97,10 @@ public class TraineeController {
                         content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                 schema = @Schema(implementation = ErrorMessage.class))),
         })
-        @PutMapping(path = "/{username}/trainers")
-        public List<TrainerDto> assignTrainers(@PathVariable String username, @RequestBody @Valid AssignTrainersDto dto) {
-            return traineeService.addTrainers(username, dto.getTrainers());
-        }
+    @PutMapping(path = "/{username}/trainers")
+    @PreAuthorize(AUTH_CHECK_BY_USERNAME)
+    public List<TrainerDto> assignTrainers(@PathVariable String username, @RequestBody @Valid AssignTrainersDto dto) {
+        return traineeService.addTrainers(username, dto.getTrainers());
+    }
 
 }
