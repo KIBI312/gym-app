@@ -1,6 +1,8 @@
 package com.seitov.gym.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -20,7 +22,9 @@ public class Trainer {
     @OneToOne
     @JoinColumn(name = "specialization_id")
     private TrainingType trainingType;
-    @ManyToMany
+    @ManyToMany(mappedBy = "trainers", fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<Trainee> trainees;
 
 }

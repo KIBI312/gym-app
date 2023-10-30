@@ -3,6 +3,7 @@ package com.seitov.gym.service.impl;
 import com.seitov.gym.dao.TrainerDao;
 import com.seitov.gym.dao.TrainingTypeDao;
 import com.seitov.gym.dto.TrainerDto;
+import com.seitov.gym.dto.TrainerShortDto;
 import com.seitov.gym.dto.UsernamePasswordDto;
 import com.seitov.gym.entity.Trainer;
 import com.seitov.gym.entity.TrainingType;
@@ -12,6 +13,7 @@ import com.seitov.gym.service.TrainerService;
 import com.seitov.gym.service.UserService;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,7 +35,7 @@ public class TrainerServiceImpl implements TrainerService {
 
     @Override
     @Transactional
-    public UsernamePasswordDto createTrainer(TrainerDto dto) {
+    public UsernamePasswordDto createTrainer(TrainerShortDto dto) {
         TrainingType trainingType = trainingTypeDao.findByName(dto.getSpecialization());
         String rawPassword = passwordService.generatePassword();
         String encodedPassword = passwordService.encodePassword(rawPassword);
@@ -49,6 +51,13 @@ public class TrainerServiceImpl implements TrainerService {
         trainer.setTrainees(Collections.emptySet());
         trainerDao.create(trainer);
         return new UsernamePasswordDto(user.getUsername(), rawPassword);
+    }
+
+    @Override
+    public TrainerDto getTrainer(String username) {
+        Trainer trainer = trainerDao.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with username: " + username + " doesn't exist"));
+        return orikaMapper.map(trainer, TrainerDto.class);
     }
 
 }

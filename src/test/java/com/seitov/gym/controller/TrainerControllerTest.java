@@ -1,7 +1,7 @@
 package com.seitov.gym.controller;
 
 import com.nimbusds.jose.shaded.json.JSONObject;
-import com.seitov.gym.dto.TrainerDto;
+import com.seitov.gym.dto.TrainerShortDto;
 import com.seitov.gym.dto.UsernamePasswordDto;
 import com.seitov.gym.dto.common.FullName;
 import com.seitov.gym.entity.TrainingType;
@@ -32,16 +32,16 @@ class TrainerControllerTest {
     @Test
     void trainerCreation() throws Exception {
         //given
-        TrainerDto trainerDto = new TrainerDto();
-        trainerDto.setFullName(new FullName("John", "Smith"));
-        trainerDto.setSpecialization(TrainingType.Name.fitness);
+        TrainerShortDto trainerShortDto = new TrainerShortDto();
+        trainerShortDto.setFullName(new FullName("John", "Smith"));
+        trainerShortDto.setSpecialization(TrainingType.Name.fitness);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("firstName", "John");
         jsonObject.put("lastName", "Smith");
         jsonObject.put("specialization", "fitness");
         UsernamePasswordDto usernamePasswordDto = new UsernamePasswordDto("John.Smith", "pass123456");
         //when
-        when(trainerService.createTrainer(trainerDto)).thenReturn(usernamePasswordDto);
+        when(trainerService.createTrainer(trainerShortDto)).thenReturn(usernamePasswordDto);
         //then
         MvcResult result = mockMvc.perform(post("/api/trainer")
                         .contentType(MediaType.APPLICATION_JSON)

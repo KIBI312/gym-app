@@ -12,6 +12,7 @@ import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -46,6 +47,20 @@ public class TrainerDao extends AbstractJpaDao<Trainer, Integer> {
             }
         });
         return trainers;
+    }
+
+    public Optional<Trainer> findByUsername(String username) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Trainer> criteriaQuery = cb.createQuery(Trainer.class);
+        Root<Trainer> traineeRoot = criteriaQuery.from(Trainer.class);
+        Join<Trainer, User> joinUser = traineeRoot.join("user");
+        Predicate usernamePredicate = cb.equal(joinUser.get("username"), username);
+        criteriaQuery.where(usernamePredicate);
+        try {
+            return Optional.of(em.createQuery(criteriaQuery).getSingleResult());
+        } catch (NoResultException ex) {
+            return Optional.empty();
+        }
     }
 
 }

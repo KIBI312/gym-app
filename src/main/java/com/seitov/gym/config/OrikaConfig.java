@@ -1,7 +1,9 @@
 package com.seitov.gym.config;
 
 import com.seitov.gym.dto.TraineeDto;
+import com.seitov.gym.dto.TraineeShortDto;
 import com.seitov.gym.dto.TrainerDto;
+import com.seitov.gym.dto.TrainerShortDto;
 import com.seitov.gym.dto.common.FullName;
 import com.seitov.gym.dto.common.PersonalInfo;
 import com.seitov.gym.entity.Trainee;
@@ -34,14 +36,13 @@ public class OrikaConfig {
                         trainee.setDateOfBirth(personalInfo.getDateOfBirth());
                     }
                 }).register();
-        mapperFactory.classMap(Trainer.class, TrainerDto.class)
-                .customize(new CustomMapper<Trainer, TrainerDto>() {
+        mapperFactory.classMap(Trainee.class, TraineeShortDto.class)
+                .customize(new CustomMapper<Trainee, TraineeShortDto>() {
                     @Override
-                    public void mapAtoB(Trainer trainer, TrainerDto trainerDto, MappingContext context) {
-                        FullName fullName = new FullName(trainer.getUser().getFirstName(), trainer.getUser().getLastName());
-                        trainerDto.setUsername(trainer.getUser().getUsername());
-                        trainerDto.setFullName(fullName);
-                        trainerDto.setSpecialization(trainer.getTrainingType().getName());
+                    public void mapAtoB(Trainee trainee, TraineeShortDto traineeShortDto, MappingContext context) {
+                        FullName fullName = new FullName(trainee.getUser().getFirstName(), trainee.getUser().getLastName());
+                        traineeShortDto.setFullName(fullName);
+                        traineeShortDto.setUsername(trainee.getUser().getUsername());
                     }
                 }).register();
         mapperFactory.classMap(Trainee.class, TraineeDto.class)
@@ -53,7 +54,27 @@ public class OrikaConfig {
                         traineeDto.setPersonalInfo(personalInfo);
                         traineeDto.setIsActive(trainee.getUser().getIsActive());
                     }
-                }).byDefault().register();
+                }).field("trainers", "trainers").register();
+        mapperFactory.classMap(Trainer.class, TrainerShortDto.class)
+                .customize(new CustomMapper<Trainer, TrainerShortDto>() {
+                    @Override
+                    public void mapAtoB(Trainer trainer, TrainerShortDto trainerShortDto, MappingContext context) {
+                        FullName fullName = new FullName(trainer.getUser().getFirstName(), trainer.getUser().getLastName());
+                        trainerShortDto.setUsername(trainer.getUser().getUsername());
+                        trainerShortDto.setFullName(fullName);
+                        trainerShortDto.setSpecialization(trainer.getTrainingType().getName());
+                    }
+                }).register();
+        mapperFactory.classMap(Trainer.class, TrainerDto.class)
+                .customize(new CustomMapper<Trainer, TrainerDto>() {
+                    @Override
+                    public void mapAtoB(Trainer trainer, TrainerDto trainerDto, MappingContext context) {
+                        FullName fullName = new FullName(trainer.getUser().getFirstName(), trainer.getUser().getLastName());
+                        trainerDto.setFullName(fullName);
+                        trainerDto.setSpecialization(trainer.getTrainingType().getName());
+                        trainerDto.setIsActive(trainer.getUser().getIsActive());
+                    }
+                }).field("trainees", "trainees").register();
         return mapperFactory.getMapperFacade();
     }
 

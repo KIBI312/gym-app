@@ -2,6 +2,8 @@ package com.seitov.gym.entity;
 
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -23,7 +25,13 @@ public class Trainee {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name="trainer_trainee",
+            joinColumns=@JoinColumn(name="trainee_id"),
+            inverseJoinColumns=@JoinColumn(name="trainer_id")
+    )
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<Trainer> trainers;
 
 }

@@ -3,7 +3,7 @@ package com.seitov.gym.service.impl;
 import com.seitov.gym.dao.TraineeDao;
 import com.seitov.gym.dao.TrainerDao;
 import com.seitov.gym.dto.TraineeDto;
-import com.seitov.gym.dto.TrainerDto;
+import com.seitov.gym.dto.TrainerShortDto;
 import com.seitov.gym.dto.UsernamePasswordDto;
 import com.seitov.gym.dto.common.PersonalInfo;
 import com.seitov.gym.entity.Trainee;
@@ -54,14 +54,12 @@ public class TraineeServiceImpl implements TraineeService {
     public TraineeDto getTrainee(String username) {
         Trainee trainee = traineeDao.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User with username: " + username + " doesn't exist"));
-        TraineeDto traineeDto = orikaMapper.map(trainee, TraineeDto.class);
-        traineeDto.setTrainers(orikaMapper.mapAsList(trainee.getTrainers(), TrainerDto.class));
-        return traineeDto;
+        return orikaMapper.map(trainee, TraineeDto.class);
     }
 
     @Override
     @Transactional
-    public List<TrainerDto> addTrainers(String traineeUsername, List<String> usernames) {
+    public List<TrainerShortDto> addTrainers(String traineeUsername, List<String> usernames) {
         Trainee trainee = traineeDao.findByUsername(traineeUsername)
                 .orElseThrow(() -> new UsernameNotFoundException("User with username: " + traineeUsername + " doesn't exist"));
         Set<Trainer> trainers = trainerDao.findByUsername(usernames);
@@ -71,7 +69,7 @@ public class TraineeServiceImpl implements TraineeService {
             trainee.getTrainers().addAll(trainers);
         }
         traineeDao.update(trainee);
-        return orikaMapper.mapAsList(trainee.getTrainers(), TrainerDto.class);
+        return orikaMapper.mapAsList(trainee.getTrainers(), TrainerShortDto.class);
     }
 
     @Override

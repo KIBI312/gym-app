@@ -2,7 +2,7 @@ package com.seitov.gym.service;
 
 import com.seitov.gym.dao.TrainerDao;
 import com.seitov.gym.dao.TrainingTypeDao;
-import com.seitov.gym.dto.TrainerDto;
+import com.seitov.gym.dto.TrainerShortDto;
 import com.seitov.gym.dto.UsernamePasswordDto;
 import com.seitov.gym.dto.common.FullName;
 import com.seitov.gym.entity.TrainingType;
@@ -37,15 +37,15 @@ class TrainerServiceTest {
         TrainingType trainingType = new TrainingType();
         trainingType.setId(1);
         trainingType.setName(TrainingType.Name.fitness);
-        TrainerDto trainerDto = new TrainerDto();
-        trainerDto.setFullName(new FullName("John", "Smith"));
-        trainerDto.setSpecialization(trainingType.getName());
+        TrainerShortDto trainerShortDto = new TrainerShortDto();
+        trainerShortDto.setFullName(new FullName("John", "Smith"));
+        trainerShortDto.setSpecialization(trainingType.getName());
         //when
         when(userService.generateUsername("John", "Smith")).thenReturn("John.Smith");
         when(trainingTypeDao.findByName(TrainingType.Name.fitness)).thenReturn(trainingType);
         when(passwordService.generatePassword()).thenReturn("1234567910");
         //then
-        UsernamePasswordDto result = trainerService.createTrainer(trainerDto);
+        UsernamePasswordDto result = trainerService.createTrainer(trainerShortDto);
         assertEquals("John.Smith",result.getUsername());
         assertEquals(10, result.getPassword().length());
     }

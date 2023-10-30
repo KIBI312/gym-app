@@ -99,7 +99,7 @@ public class TraineeController {
         })
     @PutMapping(path = "/{username}/trainers")
     @PreAuthorize(AUTH_CHECK_BY_USERNAME)
-    public List<TrainerDto> assignTrainers(@PathVariable String username, @RequestBody @Valid AssignTrainersDto dto) {
+    public List<TrainerShortDto> assignTrainers(@PathVariable String username, @RequestBody @Valid AssignTrainersDto dto) {
         return traineeService.addTrainers(username, dto.getTrainers());
     }
 

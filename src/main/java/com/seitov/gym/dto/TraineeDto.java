@@ -16,6 +16,6 @@ public class TraineeDto {
     @JsonUnwrapped
     private PersonalInfo personalInfo;
     private Boolean isActive;
-    private List<TrainerDto> trainers;
+    private List<TrainerShortDto> trainers;
 
 }
