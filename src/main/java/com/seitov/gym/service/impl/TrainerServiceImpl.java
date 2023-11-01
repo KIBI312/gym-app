@@ -60,4 +60,17 @@ public class TrainerServiceImpl implements TrainerService {
         return orikaMapper.map(trainer, TrainerDto.class);
     }
 
+    @Override
+    @Transactional
+    public TrainerDto updateTrainer(String username, TrainerShortDto dto) {
+        Trainer trainer = trainerDao.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with username: " + username + " doesn't exist"));
+        TrainingType trainingType = trainingTypeDao.findByName(dto.getSpecialization());
+        trainer.getUser().setFirstName(dto.getFullName().getFirstName());
+        trainer.getUser().setLastName(dto.getFullName().getLastName());
+        trainer.setTrainingType(trainingType);
+        trainer = trainerDao.update(trainer);
+        return orikaMapper.map(trainer, TrainerDto.class);
+    }
+
 }

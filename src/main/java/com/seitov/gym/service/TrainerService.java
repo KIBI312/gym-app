@@ -8,5 +8,6 @@ public interface TrainerService {
 
     UsernamePasswordDto createTrainer(TrainerShortDto dto);
     TrainerDto getTrainer(String username);
+    TrainerDto updateTrainer(String username, TrainerShortDto dto);
 
 }

@@ -11,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(path = "/api/trainer")
 public class TrainerController {
@@ -49,6 +51,24 @@ public class TrainerController {
     @PreAuthorize(AUTH_CHECK_BY_USERNAME)
     public TrainerDto getTraineeProfile(@PathVariable String username) {
         return trainerService.getTrainer(username);
+    }
+
+    @Operation(description = "Update Trainer profile", tags = "trainer")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = TrainerDto.class))),
+            @ApiResponse(responseCode = "400", description = "Validation errors",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorMessage.class))),
+            @ApiResponse(responseCode = "403", description = "Incorrect credentials or trying update Inactive profile",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorMessage.class))),
+    })
+    @PutMapping(path = "/{username}")
+    @PreAuthorize(AUTH_CHECK_BY_USERNAME)
+    public TrainerDto updateTrainee(@PathVariable String username, @RequestBody @Valid TrainerShortDto dto) {
+        return trainerService.updateTrainer(username, dto);
     }
 
 }
