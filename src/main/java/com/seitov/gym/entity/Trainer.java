@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,5 +27,8 @@ public class Trainer {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Set<Trainee> trainees;
+    @OneToMany
+    @JoinColumn(name = "trainer_id")
+    private List<Training> trainings;
 
 }

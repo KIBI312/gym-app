@@ -4,17 +4,16 @@ import com.seitov.gym.dto.ErrorMessage;
 import com.seitov.gym.dto.TrainingDto;
 import com.seitov.gym.service.TrainingService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/training")
@@ -38,6 +37,34 @@ public class TrainingController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public void addTraining(@RequestBody @Valid TrainingDto dto) {
         trainingService.createTraining(dto);
+    }
+
+    @Operation(description = "Get trainer trainings list", tags = "training")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    array = @ArraySchema(schema = @Schema(implementation = TrainingDto.class)))),
+            @ApiResponse(responseCode = "403", description = "Incorrect credentials",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorMessage.class))),
+    })
+    @GetMapping(path = "/trainer/{username}")
+    public List<TrainingDto> getTrainerTrainings(@PathVariable String username) {
+        return trainingService.getTrainerTrainings(username);
+    }
+
+    @Operation(description = "Get trainee trainings list", tags = "training")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    array = @ArraySchema(schema = @Schema(implementation = TrainingDto.class)))),
+            @ApiResponse(responseCode = "403", description = "Incorrect credentials",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorMessage.class))),
+    })
+    @GetMapping(path = "/trainee/{username}")
+    public List<TrainingDto> getTraineeTrainings(@PathVariable String username) {
+        return trainingService.getTraineeTrainings(username);
     }
 
 }

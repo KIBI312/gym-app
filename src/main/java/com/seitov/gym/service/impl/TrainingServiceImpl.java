@@ -8,11 +8,13 @@ import com.seitov.gym.entity.Trainee;
 import com.seitov.gym.entity.Trainer;
 import com.seitov.gym.entity.Training;
 import com.seitov.gym.service.TrainingService;
+import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class TrainingServiceImpl implements TrainingService {
@@ -23,6 +25,8 @@ public class TrainingServiceImpl implements TrainingService {
     private TraineeDao traineeDao;
     @Autowired
     private TrainerDao trainerDao;
+    @Autowired
+    private MapperFacade orikaMapper;
 
     @Override
     @Transactional
@@ -40,5 +44,20 @@ public class TrainingServiceImpl implements TrainingService {
         training.setTrainer(trainer);
         trainingDao.create(training);
     }
+
+    @Override
+    public List<TrainingDto> getTraineeTrainings(String username) {
+        Trainee trainee = traineeDao.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with username: " + username + " doesn't exist"));
+        return orikaMapper.mapAsList(trainee.getTrainings(), TrainingDto.class);
+    }
+
+    @Override
+    public List<TrainingDto> getTrainerTrainings(String username) {
+        Trainer trainer = trainerDao.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with username: " + username + " doesn't exist"));
+        return orikaMapper.mapAsList(trainer.getTrainings(), TrainingDto.class);
+    }
+
 
 }

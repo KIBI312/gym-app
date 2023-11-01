@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,5 +34,8 @@ public class Trainee {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Set<Trainer> trainers;
+    @OneToMany
+    @JoinColumn(name = "trainee_id")
+    private List<Training> trainings;
 
 }

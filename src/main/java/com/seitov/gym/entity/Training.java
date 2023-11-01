@@ -23,10 +23,10 @@ public class Training {
     @ManyToOne
     @JoinColumn(name = "trainee_id")
     private Trainee trainee;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trainer_id")
     private Trainer trainer;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "training_type_id")
     private TrainingType type;
 

@@ -1,13 +1,11 @@
 package com.seitov.gym.config;
 
-import com.seitov.gym.dto.TraineeDto;
-import com.seitov.gym.dto.TraineeShortDto;
-import com.seitov.gym.dto.TrainerDto;
-import com.seitov.gym.dto.TrainerShortDto;
+import com.seitov.gym.dto.*;
 import com.seitov.gym.dto.common.FullName;
 import com.seitov.gym.dto.common.PersonalInfo;
 import com.seitov.gym.entity.Trainee;
 import com.seitov.gym.entity.Trainer;
+import com.seitov.gym.entity.Training;
 import com.seitov.gym.entity.User;
 import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MapperFacade;
@@ -75,6 +73,17 @@ public class OrikaConfig {
                         trainerDto.setIsActive(trainer.getUser().getIsActive());
                     }
                 }).field("trainees", "trainees").register();
+        mapperFactory.classMap(Training.class, TrainingDto.class)
+                .customize(new CustomMapper<Training, TrainingDto>() {
+                    @Override
+                    public void mapAtoB(Training training, TrainingDto dto, MappingContext context) {
+                        dto.setTraineeUsername(training.getTrainee().getUser().getUsername());
+                        dto.setTrainerUsername(training.getTrainer().getUser().getUsername());
+                        dto.setName(training.getName());
+                        dto.setDate(training.getTrainingDate());
+                        dto.setDuration(training.getDuration());
+                    }
+                }).register();
         return mapperFactory.getMapperFacade();
     }
 
