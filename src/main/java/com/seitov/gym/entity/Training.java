@@ -19,7 +19,7 @@ public class Training {
     @Column(name = "training_date")
     private LocalDate trainingDate;
     @Column(name = "duration")
-    private Integer duration;
+    private Number duration;
     @ManyToOne
     @JoinColumn(name = "trainee_id")
     private Trainee trainee;

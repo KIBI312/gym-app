@@ -5,6 +5,7 @@ import com.seitov.gym.dto.TrainerShortDto;
 import com.seitov.gym.dto.UsernamePasswordDto;
 import com.seitov.gym.dto.common.FullName;
 import com.seitov.gym.entity.TrainingType;
+import com.seitov.gym.service.TraineeService;
 import com.seitov.gym.service.TrainerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ class TrainerControllerTest {
 
     @MockBean
     private TrainerService trainerService;
+    @MockBean
+    private TraineeService traineeService;
 
     @Test
     void trainerCreation() throws Exception {
