@@ -1,10 +1,12 @@
 package com.seitov.gym.service.impl;
 
+import com.seitov.gym.dao.TraineeDao;
 import com.seitov.gym.dao.TrainerDao;
 import com.seitov.gym.dao.TrainingTypeDao;
 import com.seitov.gym.dto.TrainerDto;
 import com.seitov.gym.dto.TrainerShortDto;
 import com.seitov.gym.dto.UsernamePasswordDto;
+import com.seitov.gym.entity.Trainee;
 import com.seitov.gym.entity.Trainer;
 import com.seitov.gym.entity.TrainingType;
 import com.seitov.gym.entity.User;
@@ -18,12 +20,15 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 public class TrainerServiceImpl implements TrainerService {
 
     @Autowired
     private TrainerDao trainerDao;
+    @Autowired
+    private TraineeDao traineeDao;
     @Autowired
     private TrainingTypeDao trainingTypeDao;
     @Autowired
@@ -71,6 +76,14 @@ public class TrainerServiceImpl implements TrainerService {
         trainer.setTrainingType(trainingType);
         trainer = trainerDao.update(trainer);
         return orikaMapper.map(trainer, TrainerDto.class);
+    }
+
+    @Override
+    public List<TrainerShortDto> getNotAssignedTrainers(String traineeUsername) {
+        Trainee trainee = traineeDao.findByUsername(traineeUsername)
+                .orElseThrow(() -> new UsernameNotFoundException("User with username: " + traineeUsername + " doesn't exist"));
+        List<Trainer> trainers = trainerDao.findWithoutTrainee(trainee);
+        return orikaMapper.mapAsList(trainers, TrainerShortDto.class);
     }
 
 }

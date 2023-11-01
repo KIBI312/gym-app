@@ -1,5 +1,6 @@
 package com.seitov.gym.dao;
 
+import com.seitov.gym.entity.Trainee;
 import com.seitov.gym.entity.Trainer;
 import com.seitov.gym.entity.User;
 import org.springframework.stereotype.Repository;
@@ -61,6 +62,22 @@ public class TrainerDao extends AbstractJpaDao<Trainer, Integer> {
         } catch (NoResultException ex) {
             return Optional.empty();
         }
+    }
+
+    public List<Trainer> findWithoutTrainee(Trainee traineeToExclude) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Trainer> criteriaQuery = cb.createQuery(Trainer.class);
+        Root<Trainer> trainerRoot = criteriaQuery.from(Trainer.class);
+        Subquery<Trainer> subquery = criteriaQuery.subquery(Trainer.class);
+        Root<Trainer> subqueryRoot = subquery.from(Trainer.class);
+        Join<Trainer, User> userJoin = trainerRoot.join("user");
+        subquery.select(subqueryRoot);
+        subquery.where(cb.isMember(traineeToExclude, subqueryRoot.get("trainees")));
+        Predicate notContainsTrainee = cb.not(trainerRoot.in(subquery));
+        Predicate isActivePredicate = cb.isTrue(userJoin.get("isActive"));
+        Predicate finalPredicate = cb.and(notContainsTrainee, isActivePredicate);
+        criteriaQuery.select(trainerRoot).where(finalPredicate);
+        return em.createQuery(criteriaQuery).getResultList();
     }
 
 }

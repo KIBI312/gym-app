@@ -1,8 +1,10 @@
 package com.seitov.gym.controller;
 
 import com.seitov.gym.dto.*;
+import com.seitov.gym.service.TraineeService;
 import com.seitov.gym.service.TrainerService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/trainer")
@@ -20,7 +23,7 @@ public class TrainerController {
     private final TrainerService trainerService;
     private final String AUTH_CHECK_BY_USERNAME = "#username == authentication.name";
 
-    public TrainerController(TrainerService trainerService) {
+    public TrainerController(TrainerService trainerService, TraineeService traineeService) {
         this.trainerService = trainerService;
     }
 
@@ -49,7 +52,7 @@ public class TrainerController {
     })
     @GetMapping(path = "/{username}")
     @PreAuthorize(AUTH_CHECK_BY_USERNAME)
-    public TrainerDto getTraineeProfile(@PathVariable String username) {
+    public TrainerDto getTrainerProfile(@PathVariable String username) {
         return trainerService.getTrainer(username);
     }
 
@@ -67,8 +70,23 @@ public class TrainerController {
     })
     @PutMapping(path = "/{username}")
     @PreAuthorize(AUTH_CHECK_BY_USERNAME)
-    public TrainerDto updateTrainee(@PathVariable String username, @RequestBody @Valid TrainerShortDto dto) {
+    public TrainerDto updateTrainer(@PathVariable String username, @RequestBody @Valid TrainerShortDto dto) {
         return trainerService.updateTrainer(username, dto);
     }
+
+    @Operation(description = "Get active trainers not assigned on trainee", tags = "trainer")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    array = @ArraySchema(schema = @Schema(implementation = TrainerShortDto.class)))),
+            @ApiResponse(responseCode = "403", description = "Incorrect credentials",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorMessage.class))),
+    })
+    @GetMapping(path = "/notAssignedTo/trainee/{username}")
+    public List<TrainerShortDto> getFreeTrainers(@PathVariable String username) {
+        return trainerService.getNotAssignedTrainers(username);
+    }
+
 
 }
