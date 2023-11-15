@@ -2,6 +2,9 @@ package com.seitov.gym.controller;
 
 import com.seitov.gym.dto.ErrorMessage;
 import com.seitov.gym.dto.TrainingDto;
+import com.seitov.gym.dto.TrainingReportDto;
+import com.seitov.gym.entity.Training;
+import com.seitov.gym.service.ReportService;
 import com.seitov.gym.service.TrainingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -20,9 +23,11 @@ import java.util.List;
 public class TrainingController {
 
     private final TrainingService trainingService;
+    private final ReportService reportService;
 
-    public TrainingController(TrainingService trainingService) {
+    public TrainingController(TrainingService trainingService, ReportService reportService) {
         this.trainingService = trainingService;
+        this.reportService = reportService;
     }
 
     @Operation(description = "Creates new Training", tags = "training")
@@ -36,7 +41,8 @@ public class TrainingController {
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public void addTraining(@RequestBody @Valid TrainingDto dto) {
-        trainingService.createTraining(dto);
+        Training training = trainingService.createTraining(dto);
+        reportService.reportTraining(training, TrainingReportDto.ActionType.ADD);
     }
 
     @Operation(description = "Get trainer trainings list", tags = "training")

@@ -50,6 +50,7 @@ class AbstractJpaDaoTest {
         trainee.setAddress("SomeStreet");
         trainee.setUser(user);
         trainee.setTrainers(Collections.emptySet());
+        trainee.setTrainings(Collections.emptyList());
     }
 
     @Test

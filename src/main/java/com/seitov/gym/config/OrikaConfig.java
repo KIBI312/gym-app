@@ -84,6 +84,20 @@ public class OrikaConfig {
                         dto.setDuration(training.getDuration());
                     }
                 }).register();
+        mapperFactory.classMap(Training.class, TrainingReportDto.class)
+                .customize(new CustomMapper<Training, TrainingReportDto>() {
+                    @Override
+                    public void mapAtoB(Training training, TrainingReportDto trainingReportDto, MappingContext context) {
+                        FullName fullName = new FullName();
+                        fullName.setFirstName(training.getTrainer().getUser().getFirstName());
+                        fullName.setLastName(training.getTrainer().getUser().getLastName());
+                        trainingReportDto.setFullName(fullName);
+                        trainingReportDto.setIsActive(training.getTrainer().getUser().getIsActive());
+                        trainingReportDto.setTrainerUsername(training.getTrainer().getUser().getUsername());
+                        trainingReportDto.setDate(training.getTrainingDate());
+                        trainingReportDto.setDuration(training.getDuration());
+                    }
+                }).register();
         return mapperFactory.getMapperFacade();
     }
 

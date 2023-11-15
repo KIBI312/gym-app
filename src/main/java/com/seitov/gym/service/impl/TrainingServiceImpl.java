@@ -30,7 +30,7 @@ public class TrainingServiceImpl implements TrainingService {
 
     @Override
     @Transactional
-    public void createTraining(TrainingDto dto) {
+    public Training createTraining(TrainingDto dto) {
         Trainer trainer = trainerDao.findByUsername(dto.getTrainerUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User with username: " + dto.getTrainerUsername() + " doesn't exist"));
         Trainee trainee = traineeDao.findByUsername(dto.getTraineeUsername())
@@ -43,6 +43,7 @@ public class TrainingServiceImpl implements TrainingService {
         training.setTrainee(trainee);
         training.setTrainer(trainer);
         trainingDao.create(training);
+        return training;
     }
 
     @Override

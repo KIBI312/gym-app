@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: 'gym-app'
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/gymDb
@@ -15,3 +17,9 @@ jwt:
   public.key: classpath:app.pub
 server:
   port: 8081
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8090/eureka
