@@ -31,7 +31,7 @@ public class ReportServiceImpl implements ReportService {
                 .append(hostname)
                 .append(":")
                 .append(port)
-                .append("/api/report");
+                .append("/api/report/record");
         restTemplate.postForObject(url.toString(), dto, TrainingReportDto.class);
     }
 

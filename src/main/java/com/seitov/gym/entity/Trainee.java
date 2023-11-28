@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
+import static javax.persistence.CascadeType.REMOVE;
+
 @Entity
 @Data
 @Table(name = "trainee")
@@ -34,7 +36,7 @@ public class Trainee {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Set<Trainer> trainers;
-    @OneToMany
+    @OneToMany(cascade = REMOVE)
     @JoinColumn(name = "trainee_id")
     private List<Training> trainings;
 

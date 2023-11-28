@@ -4,11 +4,13 @@ import com.seitov.gym.dao.TraineeDao;
 import com.seitov.gym.dao.TrainerDao;
 import com.seitov.gym.dto.TraineeDto;
 import com.seitov.gym.dto.TrainerShortDto;
+import com.seitov.gym.dto.TrainingReportDto;
 import com.seitov.gym.dto.UsernamePasswordDto;
 import com.seitov.gym.dto.common.PersonalInfo;
 import com.seitov.gym.entity.Trainee;
 import com.seitov.gym.entity.Trainer;
 import com.seitov.gym.service.PasswordService;
+import com.seitov.gym.service.ReportService;
 import com.seitov.gym.service.TraineeService;
 import com.seitov.gym.service.UserService;
 import ma.glasnost.orika.MapperFacade;
@@ -32,6 +34,8 @@ public class TraineeServiceImpl implements TraineeService {
     private UserService userService;
     @Autowired
     private PasswordService passwordService;
+    @Autowired
+    private ReportService reportService;
     @Autowired
     private MapperFacade orikaMapper;
 
@@ -92,6 +96,8 @@ public class TraineeServiceImpl implements TraineeService {
     public void deleteTrainee(String username) {
         Trainee trainee = traineeDao.findByUsername(username)
             .orElseThrow(() -> new UsernameNotFoundException("User with username: " + username + " doesn't exist"));
+        trainee.getTrainings()
+                .forEach(training -> reportService.reportTraining(training, TrainingReportDto.ActionType.DELETE));
         traineeDao.delete(trainee);
     }
 
