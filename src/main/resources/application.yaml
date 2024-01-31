@@ -12,19 +12,16 @@ spring:
     show-sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-  activemq:
-    broker-url: tcp://localhost:61616
-    user: ${ACTIVEMQ_USER}
-    password: ${ACTIVEMQ_PASSWORD}
-    queue: gym
 jwt:
   private.key: classpath:app.key
   public.key: classpath:app.pub
 server:
   port: 8081
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://localhost:8090/eureka
+service:
+  report:
+    host: localhost
+    port: 8082
+amazon:
+  sqs:
+    queue:
+      name: Gym-Main-Report-Queue
